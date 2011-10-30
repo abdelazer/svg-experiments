@@ -1,16 +1,16 @@
-DELAY = 1000
+DELAY = 500
 
 MATRIX_COLS = 10
-MATRIX_ROWS = 10
+MATRIX_ROWS = 20
 
-CELL_WIDTH  = 50
-CELL_HEIGHT = 50
+CELL_WIDTH  = 25
+CELL_HEIGHT = 25
 CELL_MARGIN = 0
 
 EASING_FUNCTION = "cubic-out"
-DURATION = 500
+DURATION = 250
 
-rows = []
+rows = new RingBuffer(MATRIX_ROWS)
 
 bindData = (data) ->
   row = d3
@@ -54,7 +54,7 @@ bindData = (data) ->
   rect
     .attr("x", (d) -> d.x * CELL_WIDTH)
     .attr("y", 0)
-    .attr("width",  CELL_WIDTH)
+    .attr("width", CELL_WIDTH)
     .attr("height", CELL_HEIGHT)
     .attr("fill", (d) -> d.fill)
 
@@ -64,13 +64,11 @@ addRow = ->
   cells = for i in [0..4]
     {
       x: Math.floor(Math.random() * MATRIX_COLS),
-      y: Math.floor(Math.random() * MATRIX_ROWS),
       fill: "rgb(#{Math.floor(Math.random() * 255)}, #{Math.floor(Math.random() * 255)}, #{Math.floor(Math.random() * 255)})"
     }
 
   rows.unshift(id: uuid(), cells: cells)
-  rows.pop() if rows.length > MATRIX_ROWS
-  bindData(rows)
+  bindData(rows.toArray())
 
 setInterval(addRow, DELAY)
 

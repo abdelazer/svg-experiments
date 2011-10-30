@@ -14,7 +14,7 @@
 
       #grid line {
         stroke: black;
-        stroke-dasharray: 1, 48, 1, 0;
+        stroke-dasharray: 1, 23, 1, 0;
         stroke-width: 1000;
         shape-rendering: crispEdges;
       }
@@ -25,16 +25,17 @@
     <script type="text/javascript" src="lib/uuid.js"></script>
   </head>
   <body>
-    <svg width="500px" height="500px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <svg width="250px" height="500px" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <g id="grid">
-        <rect x="0" y="0" width="500" height="500" />
-        <line x1="0" y1="0" x2="500" y2="0" />
+        <rect x="0" y="0" width="250" height="500" />
+        <line x1="0" y1="0" x2="250" y2="0" />
         <line x1="0" y1="0" x2="0" y2="500" />
       </g>
 
       <g id="matrix"></g>
     </svg>
 
+    <script type="text/coffeescript" src="lib/ring_buffer.coffee"></script>
     <script type="text/coffeescript" src="tetris.coffee"></script>
   </body>
 </html>
