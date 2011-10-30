@@ -3,22 +3,26 @@
   <head>
     <style type="text/css">
       #matrix rect {
-        stroke: black;
+        opacity: 0.9;
+        shape-rendering: crispEdges;
       }
 
       #grid rect {
         fill: gray;
+        shape-rendering: crispEdges;
       }
 
       #grid line {
         stroke: black;
         stroke-dasharray: 1, 48, 1, 0;
         stroke-width: 1000;
+        shape-rendering: crispEdges;
       }
     </style>
 
     <script type="text/javascript" src="lib/coffee-script.js"></script>
     <script type="text/javascript" src="lib/d3.min.js"></script>
+    <script type="text/javascript" src="lib/uuid.js"></script>
   </head>
   <body>
     <svg width="500px" height="500px" version="1.1" xmlns="http://www.w3.org/2000/svg">
