@@ -10,6 +10,14 @@ CELL_MARGIN = 0
 EASING_FUNCTION = "cubic-out"
 DURATION = 250
 
+class Row
+  constructor: ->
+    @id = uuid()
+    @cells = []
+
+  addCell: (index, color) ->
+    @cells.push(x: index, color: color)
+
 rows = new RingBuffer(MATRIX_ROWS)
 
 bindData = (data) ->
@@ -56,18 +64,17 @@ bindData = (data) ->
     .attr("y", 0)
     .attr("width", CELL_WIDTH)
     .attr("height", CELL_HEIGHT)
-    .attr("fill", (d) -> d.fill)
+    .attr("fill", (d) -> d.color)
 
   rect.exit().remove()
 
 addRow = ->
-  cells = for i in [0..4]
-    {
-      x: Math.floor(Math.random() * MATRIX_COLS),
-      fill: "rgb(#{Math.floor(Math.random() * 255)}, #{Math.floor(Math.random() * 255)}, #{Math.floor(Math.random() * 255)})"
-    }
+  row = new Row
 
-  rows.unshift(id: uuid(), cells: cells)
+  for i in [0..4]
+    row.addCell(Math.floor(Math.random() * MATRIX_COLS), "rgb(#{Math.floor(Math.random() * 255)}, #{Math.floor(Math.random() * 255)}, #{Math.floor(Math.random() * 255)})")
+
+  rows.unshift(row)
   bindData(rows.toArray())
 
 setInterval(addRow, DELAY)

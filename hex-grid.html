@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      #grid polygon {
+        fill: lightgray;
+        stroke: gray;
+        opacity: 0.5;
+      }
+    </style>
+
+    <script type="text/javascript" src="lib/coffee-script.js"></script>
+    <script type="text/javascript" src="lib/d3.min.js"></script>
+  </head>
+  <body>
+    <svg width="500px" height="500px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <g id="grid"></g>
+    </svg>
+
+    <script type="text/coffeescript">
+      degreesToRadians = (degrees) ->
+        degrees * Math.PI / 180.0;
+
+      calculateHexGrid = (originX, originY, size, padding, width, height) ->
+        r = Math.cos(degreesToRadians(30)) * size
+        h = Math.sin(degreesToRadians(30)) * size
+
+        vertices = []
+
+        for i in [0...width]
+          for j in [0...height]
+            x = originX + (i * ((2 * r) + padding)) + ((j % 2) * (r + (padding / 2)))
+            y = originY + (j * (size + h + padding))
+
+            vertices.push([
+              [x, y]
+              [x + r, y + h]
+              [x + r, y + size + h]
+              [x, y + size + h + h]
+              [x - r, y + size + h]
+              [x - r, y + h]
+            ])
+
+        vertices
+
+      size    = 20
+      padding = 2
+      width   = 10
+      height  = 10
+
+      r = Math.cos(degreesToRadians(30)) * size
+      h = Math.sin(degreesToRadians(30)) * size
+
+      originX = 0
+      originY = 0 -h - (size / 2)
+
+      data = calculateHexGrid(originX, originY, size, padding, width, height)
+
+      row = d3.select("#grid").selectAll("polygon").data(data)
+
+      row.enter().append("svg:polygon")
+
+      row.attr("points", (d, i) -> d.join(" "))
+
+      row.exit().remove()
+    </script>
+  </body>
+</html>
