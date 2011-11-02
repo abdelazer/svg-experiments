@@ -5,12 +5,21 @@
       #hex-tile polygon {
         fill: lightgray;
         stroke: gray;
-        opacity: 0.5;
+        opacity: 1;
+      }
+
+      #hex-grid {
+        stroke: gray;
+        stroke-opacity: 1;
+        shape-rendering: crispEdges;
       }
     </style>
 
     <script type="text/javascript" src="lib/coffee-script.js"></script>
+    <script type="text/javascript" src="lib/jquery-1.7.min.js"></script>
+    <script type="text/javascript" src="lib/backbone-0.5.3.min.js"></script>
     <script type="text/javascript" src="lib/d3.min.js"></script>
+    <script type="text/coffeescript" src="hex-grid.coffee"></script>
   </head>
   <body>
     <svg width="1000px" height="1000px" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -18,63 +27,12 @@
         <pattern id="hex-tile" patternUnits="userSpaceOnUse"></pattern>
       </defs>
 
-      <rect x="0" y="0" width="1000" height="1000" fill="url(#hex-tile)" />
+      <rect id="hex-grid" fill="url(#hex-tile)" />
     </svg>
 
     <script type="text/coffeescript">
-      degreesToRadians = (degrees) ->
-        degrees * Math.PI / 180.0;
-
-      calculateHexGrid = (originX, originY, size, padding, cols, rows) ->
-        r = Math.cos(degreesToRadians(30)) * size
-        h = Math.sin(degreesToRadians(30)) * size
-
-        vertices = []
-
-        for j in [0...rows]
-          for i in [0...cols]
-            x = originX + (i * ((2 * r) + padding)) + ((j % 2) * (r + (padding / 2)))
-            y = originY + (j * (size + h + padding))
-
-            vertices.push([
-              [x, y]
-              [x + r, y + h]
-              [x + r, y + size + h]
-              [x, y + size + h + h]
-              [x - r, y + size + h]
-              [x - r, y + h]
-            ])
-
-        vertices
-
-      size    = 20
-      padding = 2
-      cols    = 3
-      rows    = 3
-
-      r = Math.cos(degreesToRadians(30)) * size
-      h = Math.sin(degreesToRadians(30)) * size
-
-      width  = (cols - 1) * ((2 * r) + padding)
-      height = (rows - 1) * (size + h + padding)
-
-      originX = 0
-      originY = -h - (size / 2)
-
-      data = calculateHexGrid(originX, originY, size, padding, cols, rows)
-
-      d3
-        .select("#hex-tile")
-        .attr("width", width)
-        .attr("height", height)
-
-      row = d3.select("#hex-tile").selectAll("polygon").data(data)
-
-      row.enter().append("svg:polygon")
-
-      row.attr("points", (d, i) -> d.join(" "))
-
-      row.exit().remove()
+      $(document).ready ->
+        hexGrid = new HexGrid(8, 8, 20, 4)
     </script>
   </body>
 </html>
